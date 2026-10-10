@@ -584,7 +584,7 @@ html.pre{overflow:hidden}
 
 /* ===== v12: wow — the drop that floods the screen ===== */
 .wow{position:relative;height:320vh;background:#e8eff7}
-.wp{position:sticky;top:0;height:100vh;overflow:hidden;background:linear-gradient(180deg,#e8eff7,#e4ecf7)}
+.wp{position:absolute;left:0;right:0;top:0;height:100vh;height:100lvh;overflow:hidden;background:linear-gradient(180deg,#e8eff7,#e4ecf7)}
 .wfl{position:absolute;inset:0;opacity:0;background:radial-gradient(60vw 60vh at 30% 25%,rgba(111,214,234,.35),rgba(111,214,234,0) 70%),radial-gradient(55vw 55vh at 75% 80%,rgba(168,146,255,.3),rgba(168,146,255,0) 70%),linear-gradient(180deg,#0b2036,#0a1626)}
 .wb{position:absolute;left:50%;top:50%;width:min(46vmin,420px);aspect-ratio:1;border-radius:46% 54% 52% 48%/55% 45% 55% 45%;transform:translate(-50%,-50%) scale(.22);will-change:transform;
  background:radial-gradient(circle at 30% 26%,#fff 0 6%,rgba(255,255,255,0) 28%),conic-gradient(from 200deg,#bccbff,#6fd6ea,#eaf4ff,#a892ff,#bccbff);
@@ -726,6 +726,11 @@ body[data-pg] #drink,body[data-pg] #fresh,body[data-pg] #food{position:relative;
 @media(max-width:900px){
  body[data-pg] #drink,body[data-pg] #fresh,body[data-pg] #food{overflow:hidden}
 }
+
+/* v16: pinned wow driven by JS (iOS Safari-safe: no sticky, no huge scaled layers) */
+.wp.fx{position:fixed}
+.wp.en{top:auto;bottom:0}
+@media(max-width:900px){.wb{width:min(70vw,360px);will-change:auto}}
 </style></head>
 <body>
 <div id="pre" aria-hidden="true"><i class="bl b1"></i><i class="bl b2"></i><i class="bl b3"></i><i class="bl b4"></i>
@@ -1097,11 +1102,11 @@ rows.forEach(function(r,i){r.addEventListener('mouseenter',function(){go(i)});r.
 addEventListener('resize',function(){var i=rows.findIndex(function(r){return r.classList.contains('on')});go(i<0?0:i)});setTimeout(function(){go(0)},60)})();
 
 /* wow: a drop that grows until it floods the screen */
-(function(){var s=document.getElementById('wow');if(!s)return;var b=document.getElementById('wb'),a=document.getElementById('wa'),c=document.getElementById('wc'),fl=s.querySelector('.wfl');
+(function(){var s=document.getElementById('wow');if(!s)return;var pp=s.querySelector('.wp'),b=document.getElementById('wb'),a=document.getElementById('wa'),c=document.getElementById('wc'),fl=s.querySelector('.wfl');
 var mob=matchMedia('(max-width:900px)'),red=matchMedia('(prefers-reduced-motion: reduce)').matches;
 function ss(x,y,t){t=Math.max(0,Math.min(1,(t-x)/(y-x)));return t*t*(3-2*t)}
-function upd(){var r=s.getBoundingClientRect(),vh=innerHeight,p=red?.85:Math.max(0,Math.min(1,-r.top/(r.height-vh)));
- var sc=.22+Math.pow(p/.62,1.6)*9;if(p>.62)sc=9.22+(p-.62)*6;
+function upd(){var r=s.getBoundingClientRect(),vh=pp.offsetHeight||innerHeight,p=red?.85:Math.max(0,Math.min(1,-r.top/(r.height-vh)));pp.classList.toggle('fx',r.top<=0&&r.bottom>vh);pp.classList.toggle('en',r.bottom<=vh);
+ var K=mob.matches?4.6:9,sc=.22+Math.pow(Math.min(p,.62)/.62,1.6)*K;if(p>.62)sc+=(p-.62)*(mob.matches?1.2:6);
  b.style.transform='translate(-50%,-50%) scale('+sc.toFixed(3)+') rotate('+(p*90).toFixed(1)+'deg)';
  b.style.opacity=(1-ss(.5,.72,p)).toFixed(3);
  fl.style.opacity=(ss(.34,.62,p)*(mob.matches?1-ss(.84,.99,p):1)).toFixed(3);

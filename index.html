@@ -740,6 +740,14 @@ body[data-pg] #drink,body[data-pg] #fresh,body[data-pg] #food{position:relative;
  body.mo .top4,body.mo .top4.inv,body.pgo .top4{background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:none}
  .ft{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 110px)}
 }
+
+/* v18: header plate on desktop appears once the page is scrolled */
+@media(min-width:901px){
+ .top4{transition:background .35s ease,box-shadow .35s ease,-webkit-backdrop-filter .35s ease,backdrop-filter .35s ease}
+ .top4.stk{background:rgba(232,239,247,.72);-webkit-backdrop-filter:blur(18px) saturate(1.5);backdrop-filter:blur(18px) saturate(1.5);box-shadow:0 1px 0 rgba(10,26,47,.06)}
+ .top4.stk.inv{background:rgba(10,22,38,.62);box-shadow:0 1px 0 rgba(255,255,255,.08)}
+ body.mo .top4,body.mo .top4.stk,body.mo .top4.stk.inv,body.pgo .top4,body.pgo .top4.stk{background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:none}
+}
 </style></head>
 <body>
 <div id="pre" aria-hidden="true"><i class="bl b1"></i><i class="bl b2"></i><i class="bl b3"></i><i class="bl b4"></i>
@@ -1145,5 +1153,8 @@ document.addEventListener('click',function(e){var a=e.target.closest&&e.target.c
  if(h.charAt(0)==='#'&&h.length>1||h==='#top'){e.preventDefault();menu(false);if(cur)close(function(){go(h)});else go(h)}},true);
 addEventListener('popstate',function(){if(skip){skip=false;var f=after;after=null;f&&f();return}if(cur){cur=null;B.removeAttribute('data-pg');B.classList.remove('pgo')}});
 addEventListener('keydown',function(e){if(e.key==='Escape'){if(B.classList.contains('mo'))menu(false);else if(cur)close()}})})();
+
+/* header plate once scrolled */
+(function(){var h=document.querySelector('.top4');if(!h)return;function f(){h.classList.toggle('stk',scrollY>24)}addEventListener('scroll',f,{passive:true});f()})();
 </script>
 </body></html>

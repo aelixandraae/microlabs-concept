@@ -715,9 +715,10 @@ body.mo,body.pgo{overflow:hidden}
 body.pgo .top4{opacity:1!important}
 body.pgo .top4:before{content:'';position:absolute;left:0;right:0;top:0;height:96px;z-index:-1;pointer-events:none;background:linear-gradient(180deg,rgba(232,239,247,.96) 45%,rgba(232,239,247,0))}
 .pgbar{display:none!important}
-.pgs{display:none}
+.pgs{display:contents}
+@media(max-width:900px){.pgs{display:none}.pgs>section{display:none}}
 body[data-pg] .pgs{display:block;position:fixed;inset:0;z-index:30;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background:#e6edf4;animation:pgin .5s cubic-bezier(.2,.7,.2,1)}
-.pgs>section{display:none}
+.pgs>section{}
 body[data-pg] #drink,body[data-pg] #fresh,body[data-pg] #food{position:relative;inset:auto;z-index:auto;overflow:hidden;animation:none}
 @media(min-width:901px){
  body[data-pg=drink] #drink,body[data-pg=fresh] #fresh,body[data-pg=food] #food{display:block}
@@ -747,6 +748,15 @@ body[data-pg] #drink,body[data-pg] #fresh,body[data-pg] #food{position:relative;
  .top4.stk{background:rgba(232,239,247,.72);-webkit-backdrop-filter:blur(18px) saturate(1.5);backdrop-filter:blur(18px) saturate(1.5);box-shadow:0 1px 0 rgba(10,26,47,.06)}
  .top4.stk.inv{background:rgba(10,22,38,.62);box-shadow:0 1px 0 rgba(255,255,255,.08)}
  body.mo .top4,body.mo .top4.stk,body.mo .top4.stk.inv,body.pgo .top4,body.pgo .top4.stk{background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:none}
+}
+
+/* v19: desktop keeps the original long landing — menu and topic pages are phone-only */
+@media(min-width:901px){
+ .top4{grid-template-columns:1fr auto 1fr;gap:0}
+ .top4 nav{display:flex}
+ .top4 .bg,.mnu{display:none!important}
+ .pgs{display:contents!important}
+ .pgs>section{display:revert!important}
 }
 </style></head>
 <body>
@@ -1136,7 +1146,7 @@ function upd(){var r=s.getBoundingClientRect(),vh=pp.offsetHeight||innerHeight,p
 addEventListener('scroll',upd,{passive:true});addEventListener('resize',upd);upd()})();
 
 /* menu + the three topic pages (all screen sizes) */
-(function(){var B=document.body,bg=document.getElementById('bg'),mn=document.getElementById('mnu'),cur=null,after=null,skip=false;if(!bg||!mn)return;
+(function(){var mq=matchMedia('(max-width:900px)'),B=document.body,bg=document.getElementById('bg'),mn=document.getElementById('mnu'),cur=null,after=null,skip=false;if(!bg||!mn)return;
 function menu(on){B.classList.toggle('mo',on);bg.setAttribute('aria-expanded',on);mn.setAttribute('aria-hidden',!on)}
 function show(id){B.setAttribute('data-pg',id);var s=document.getElementById(id);var w=s.parentNode;w.scrollTop=0;[].forEach.call(s.querySelectorAll('.rv'),function(e){e.classList.add('in')});
  var h=document.querySelector('.top4');if(h)h.classList.remove('inv');var L=window.__lazy&&window.__lazy[id];if(L)L();
@@ -1144,9 +1154,11 @@ function show(id){B.setAttribute('data-pg',id);var s=document.getElementById(id)
 function open(id){menu(false);if(!cur){B.classList.add('pgo');history.pushState({pg:id},'')}cur=id;show(id)}
 function close(fn){if(!cur){fn&&fn();return}cur=null;B.removeAttribute('data-pg');B.classList.remove('pgo');
  if(history.state&&history.state.pg){skip=true;after=fn||null;history.back()}else if(fn)fn()}
+function boot(){if(!mq.matches){var L=window.__lazy||{};Object.keys(L).forEach(function(k){L[k]()})}}
+boot();mq.addEventListener&&mq.addEventListener('change',function(){boot();if(!mq.matches){menu(false);if(cur){cur=null;B.removeAttribute('data-pg');B.classList.remove('pgo')}}});
 bg.addEventListener('click',function(){menu(!B.classList.contains('mo'))});
 function go(h){var t=h==='#top'?null:document.querySelector(h);setTimeout(function(){t?t.scrollIntoView({behavior:'smooth'}):scrollTo({top:0,behavior:'smooth'})},40)}
-document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a');if(!a)return;var h=a.getAttribute('href')||'';
+document.addEventListener('click',function(e){if(!mq.matches)return;var a=e.target.closest&&e.target.closest('a');if(!a)return;var h=a.getAttribute('href')||'';
  var id=a.dataset.pg||(/^#(drink|fresh|food)$/.test(h)?h.slice(1):null);
  if(!id&&a.closest('.cta4')){var i=[].indexOf.call(a.parentNode.children,a);id=i===0?'drink':i===1?'food':null}
  if(id){e.preventDefault();open(id);return}

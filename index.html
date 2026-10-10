@@ -686,6 +686,46 @@ html.pre{overflow:hidden}
  body.mo .top4.inv .bg{background:rgba(255,255,255,.55);box-shadow:0 0 0 1px rgba(10,26,47,.14) inset}
  body.mo .top4.inv .bg i{background:#0a1a2f}
 }
+
+/* ===== v15: menu + topic pages on every screen size ===== */
+.top4{z-index:50;grid-template-columns:1fr auto auto;gap:12px}
+.top4 nav{display:none}
+.top4 .bg{display:flex;pointer-events:auto;flex-direction:column;justify-content:center;gap:6px;width:48px;height:48px;padding:0 14px;border:0;border-radius:99px;background:rgba(255,255,255,.55);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:0 0 0 1px rgba(10,26,47,.14) inset,0 8px 20px -10px rgba(40,70,140,.35);cursor:pointer;position:relative;z-index:22}
+.bg i{display:block;height:1.5px;background:var(--ink,#0a1a2f);border-radius:2px;transition:transform .35s cubic-bezier(.2,.7,.2,1),background .3s}
+body.mo .bg i:nth-child(1){transform:translateY(3.75px) rotate(45deg)}
+body.mo .bg i:nth-child(2){transform:translateY(-3.75px) rotate(-45deg)}
+body.mo .top4,body.mo .top4.inv{--ink:#0a1a2f}
+body.mo .top4.inv .btn{color:#0a1a2f}
+.top4.inv .bg{background:rgba(255,255,255,.14);box-shadow:0 0 0 1px rgba(255,255,255,.5) inset}
+.top4.inv .bg i{background:#fff}
+body.mo .top4.inv .bg{background:rgba(255,255,255,.55);box-shadow:0 0 0 1px rgba(10,26,47,.14) inset}
+body.mo .top4.inv .bg i{background:#0a1a2f}
+.mnu{display:flex;position:fixed;inset:0;z-index:40;padding:110px clamp(22px,2.2vw,32px) 28px;background:radial-gradient(70% 45% at 85% 12%,rgba(111,214,234,.35),rgba(111,214,234,0) 70%),radial-gradient(70% 45% at 8% 92%,rgba(168,146,255,.28),rgba(168,146,255,0) 70%),linear-gradient(180deg,#eef3fa,#e3ebf6);visibility:hidden;opacity:0;transition:opacity .4s ease,visibility 0s linear .4s;overflow-y:auto}
+body.mo .mnu{visibility:visible;opacity:1;transition:opacity .4s ease}
+.mnu nav{display:flex;flex-direction:column;width:100%;max-width:1100px;margin:0 auto;min-height:100%}
+.mnu small{display:block;font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.18em;text-transform:uppercase;color:rgba(10,26,47,.55);margin-bottom:14px}
+.mnu nav>a{display:flex;align-items:baseline;gap:18px;padding:clamp(14px,2.4vh,26px) 0;border-top:1px solid rgba(10,26,47,.14);font:300 clamp(36px,10.5vw,88px)/1.05 'Outfit',sans-serif;letter-spacing:-.045em;color:#0a1a2f;text-decoration:none;opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .5s cubic-bezier(.2,.7,.2,1),color .3s}
+.mnu nav>a:hover{color:#4f60e8}
+.mnu nav>a i{font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.14em;font-style:normal;color:rgba(10,26,47,.45);min-width:22px}
+body.mo .mnu nav>a{opacity:1;transform:none}
+body.mo .mnu nav>a:nth-of-type(1){transition-delay:.08s}body.mo .mnu nav>a:nth-of-type(2){transition-delay:.14s}body.mo .mnu nav>a:nth-of-type(3){transition-delay:.2s}
+.mnu .mf{margin-top:auto;padding-top:34px;display:flex;flex-direction:column;gap:6px;border-top:1px solid rgba(10,26,47,.14);font:400 14px/1.5 'Outfit',sans-serif;color:#3a4b63}
+.mnu .mf a{font:400 22px 'Outfit',sans-serif;color:#0a1a2f;text-decoration:none}
+body.mo,body.pgo{overflow:hidden}
+body.pgo .top4{opacity:1!important}
+body.pgo .top4:before{content:'';position:absolute;left:0;right:0;top:0;height:96px;z-index:-1;pointer-events:none;background:linear-gradient(180deg,rgba(232,239,247,.96) 45%,rgba(232,239,247,0))}
+.pgbar{display:none!important}
+.pgs{display:none}
+body[data-pg] .pgs{display:block;position:fixed;inset:0;z-index:30;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background:#e6edf4;animation:pgin .5s cubic-bezier(.2,.7,.2,1)}
+.pgs>section{display:none}
+body[data-pg] #drink,body[data-pg] #fresh,body[data-pg] #food{position:relative;inset:auto;z-index:auto;overflow:hidden;animation:none}
+@media(min-width:901px){
+ body[data-pg=drink] #drink,body[data-pg=fresh] #fresh,body[data-pg=food] #food{display:block}
+ .mnu{padding-top:150px}
+}
+@media(max-width:900px){
+ body[data-pg] #drink,body[data-pg] #fresh,body[data-pg] #food{overflow:hidden}
+}
 </style></head>
 <body>
 <div id="pre" aria-hidden="true"><i class="bl b1"></i><i class="bl b2"></i><i class="bl b3"></i><i class="bl b4"></i>
@@ -697,15 +737,13 @@ html.pre{overflow:hidden}
   <button class="bg" id="bg" type="button" aria-label="Menu" aria-expanded="false" aria-controls="mnu"><i></i><i></i></button>
 </header>
 <div class="mnu" id="mnu" aria-hidden="true"><nav>
-  <small>Menu</small>
+  <small>Pages</small>
   <a href="#drink" data-pg="drink"><i>01</i>Drinking water</a>
   <a href="#fresh" data-pg="fresh"><i>02</i>Fresh water</a>
   <a href="#food" data-pg="food"><i>03</i>Food</a>
-  <a href="#how"><i>04</i>How it works</a>
-  <a href="#contact"><i>05</i>Contact</a>
   <div class="mf"><span>Castleblayney, Co. Monaghan</span><a href="tel:0429746653">042 9746653</a><span>Mon–Thu 09:00–17:00 · Fri 08:00–16:00</span></div>
 </nav></div>
-<div class="pgbar" id="pgbar"><a class="pgb" href="#top" data-close>microlabs</a><button type="button" data-close>Close<i></i></button></div>
+
 <section class="hero h4" id="top"><div class="plate" id="plate">
   <canvas id="hg"></canvas>
   <h1 class="orbword" aria-label="microlabs">microlabs.</h1>
@@ -715,7 +753,7 @@ html.pre{overflow:hidden}
 <div class="scr">Scroll to explore</div>
   <div class="cta4"><div class="two"><a class="btn ghost" href="#contact">Test my water</a><a class="btn ghost" href="#contact">Test my food</a></div></div>
 </div></section>
-<section class="w2" id="drink">
+<div class="pgs"><section class="w2" id="drink">
   <canvas id="bubs"></canvas>
   <svg class="w2ln" id="w2ln" aria-hidden="true"></svg>
   <div class="an" data-x=".417" data-y=".165" data-tx=".512" data-ty=".252" data-s="l"><span>In-house<br>analysis</span></div>
@@ -818,7 +856,7 @@ html.pre{overflow:hidden}
   </div>
   <a class="fdown" href="#how" aria-label="Scroll down"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a>
 </section>
-<section class="wow" id="wow" aria-label="Every sample tells a story">
+</div><section class="wow" id="wow" aria-label="Every sample tells a story">
   <div class="wp">
     <div class="wfl"></div>
     <i class="wb" id="wb"></i>
@@ -953,7 +991,7 @@ if(H.classList.contains('pre')){var s=null,D=2300;function pf(n){if(s===null)s=n
 requestAnimationFrame(pf);setTimeout(done,6000);addEventListener('pointerdown',done,{once:true})}
 /* header colour over dark blocks */
 var top4=document.querySelector('.top4'),darks=[].slice.call(document.querySelectorAll('[data-dark]'));
-function hd(){var y=34,on=false;darks.forEach(function(d){var r=d.getBoundingClientRect();if(r.top<=y&&r.bottom>=y)on=true});top4.classList.toggle('inv',on)}
+function hd(){var y=34,on=false;darks.forEach(function(d){var r=d.getBoundingClientRect();if(r.top<=y&&r.bottom>=y)on=true});top4.classList.toggle('inv',on&&!document.body.classList.contains('pgo'))}
 addEventListener('scroll',hd,{passive:true});hd();
 /* scroll-linked word reveal */
 var rw=document.getElementById('rw'),ws=[];if(rw){rw.innerHTML=rw.textContent.trim().split(/\s+/).map(function(w){return'<span>'+w+'</span>'}).join(' ');ws=[].slice.call(rw.children)}
@@ -1071,21 +1109,23 @@ function upd(){var r=s.getBoundingClientRect(),vh=innerHeight,p=red?.85:Math.max
  var h4=document.querySelector('.top4');if(h4&&!mob.matches&&r.top<=34&&r.bottom>=34&&p>.5)h4.classList.add('inv');c.style.opacity=ss(.62,.8,p).toFixed(3);c.style.transform='translate(-50%,calc(-50% + '+((1-ss(.62,.8,p))*40).toFixed(1)+'px))'}
 addEventListener('scroll',upd,{passive:true});addEventListener('resize',upd);upd()})();
 
-/* mobile: menu + the three topic pages */
-(function(){var mq=matchMedia('(max-width:900px)'),B=document.body,bg=document.getElementById('bg'),mn=document.getElementById('mnu'),cur=null;if(!bg||!mn)return;
+/* menu + the three topic pages (all screen sizes) */
+(function(){var B=document.body,bg=document.getElementById('bg'),mn=document.getElementById('mnu'),cur=null,after=null,skip=false;if(!bg||!mn)return;
 function menu(on){B.classList.toggle('mo',on);bg.setAttribute('aria-expanded',on);mn.setAttribute('aria-hidden',!on)}
-function open(id){cur=id;menu(false);B.setAttribute('data-pg',id);B.classList.add('pgo');var s=document.getElementById(id);s.scrollTop=0;[].forEach.call(s.querySelectorAll('.rv'),function(e){e.classList.add('in')});
- requestAnimationFrame(function(){dispatchEvent(new Event('resize'))});setTimeout(function(){dispatchEvent(new Event('resize'))},120);history.pushState({pg:id},'')}
-function close(pop){if(!cur)return;cur=null;B.removeAttribute('data-pg');B.classList.remove('pgo');if(!pop&&history.state&&history.state.pg)history.back()}
+function show(id){B.setAttribute('data-pg',id);var s=document.getElementById(id);var w=s.parentNode;w.scrollTop=0;[].forEach.call(s.querySelectorAll('.rv'),function(e){e.classList.add('in')});
+ var h=document.querySelector('.top4');if(h)h.classList.remove('inv');
+ requestAnimationFrame(function(){dispatchEvent(new Event('resize'))});setTimeout(function(){dispatchEvent(new Event('resize'))},140)}
+function open(id){menu(false);if(!cur){B.classList.add('pgo');history.pushState({pg:id},'')}cur=id;show(id)}
+function close(fn){if(!cur){fn&&fn();return}cur=null;B.removeAttribute('data-pg');B.classList.remove('pgo');
+ if(history.state&&history.state.pg){skip=true;after=fn||null;history.back()}else if(fn)fn()}
 bg.addEventListener('click',function(){menu(!B.classList.contains('mo'))});
-document.addEventListener('click',function(e){if(!mq.matches)return;var a=e.target.closest&&e.target.closest('a,button[data-close]');if(!a)return;
- if(a.hasAttribute('data-close')||a.tagName==='BUTTON'&&a.parentNode.id==='pgbar'){e.preventDefault();close();return}
- var h=a.getAttribute('href')||'',id=a.dataset.pg||(/^#(drink|fresh|food)$/.test(h)?h.slice(1):null);
+function go(h){var t=h==='#top'?null:document.querySelector(h);setTimeout(function(){t?t.scrollIntoView({behavior:'smooth'}):scrollTo({top:0,behavior:'smooth'})},40)}
+document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a');if(!a)return;var h=a.getAttribute('href')||'';
+ var id=a.dataset.pg||(/^#(drink|fresh|food)$/.test(h)?h.slice(1):null);
  if(!id&&a.closest('.cta4')){var i=[].indexOf.call(a.parentNode.children,a);id=i===0?'drink':i===1?'food':null}
  if(id){e.preventDefault();open(id);return}
- if(a.closest('.mnu')&&h.charAt(0)==='#'){e.preventDefault();menu(false);var t=document.querySelector(h);if(t)setTimeout(function(){t.scrollIntoView({behavior:'smooth'})},60)}},true);
-addEventListener('popstate',function(){if(cur)close(true)});
-addEventListener('keydown',function(e){if(e.key==='Escape'){if(cur)close();else menu(false)}});
-mq.addEventListener&&mq.addEventListener('change',function(){if(!mq.matches){menu(false);close()}})})();
+ if(h.charAt(0)==='#'&&h.length>1||h==='#top'){e.preventDefault();menu(false);if(cur)close(function(){go(h)});else go(h)}},true);
+addEventListener('popstate',function(){if(skip){skip=false;var f=after;after=null;f&&f();return}if(cur){cur=null;B.removeAttribute('data-pg');B.classList.remove('pgo')}});
+addEventListener('keydown',function(e){if(e.key==='Escape'){if(B.classList.contains('mo'))menu(false);else if(cur)close()}})})();
 </script>
 </body></html>
